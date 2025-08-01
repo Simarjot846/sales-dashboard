@@ -1,14 +1,14 @@
 'use client';
 
 import React, { useState } from "react";
-import ChartCard from "../molecules/ChartCard";
+import ChartCard from "../molecules/Chartcard";
 import Input from "../atoms/Input";
 import { filterSalesByYear } from "../../lib/utils";
 import salesData from "../../data/salesData.json";
 
 const years = [2022, 2023, 2024];
 
-type ChartType = "bar" | "line" | "pie";
+type ChartType = "bar" | "line" | "pie"; // ✅ include "pie"
 
 type SalesRecord = {
   year: number;
