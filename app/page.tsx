@@ -5,7 +5,8 @@ import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   LineChart, Line, PieChart, Pie, Cell
 } from "recharts";
-import { salesData } from "@/lib/salesData";
+import { salesData } from "../lib/salesData";
+
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
 
