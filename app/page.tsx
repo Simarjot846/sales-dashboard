@@ -1,17 +1,16 @@
 'use client';
 
-import React, { useState } from "react";
+import React, { useState } from 'react';
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   LineChart, Line, PieChart, Pie, Cell
-} from "recharts";
-import { salesData } from "../lib/salesData";
-
+} from 'recharts';
+import { salesData } from '../lib/salesData';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
 
 export default function Dashboard() {
-  const [threshold, setThreshold] = useState(0);
+  const [threshold, setThreshold] = useState<number>(0);
 
   const filteredData = salesData.filter((data) => data.sales >= threshold);
 
@@ -19,6 +18,7 @@ export default function Dashboard() {
     <main className="min-h-screen bg-gray-50 px-6 py-10 text-gray-800">
       <h1 className="text-3xl font-bold text-center mb-8">📊 Sales Dashboard</h1>
 
+      {/* Threshold Filter Input */}
       <div className="max-w-xl mx-auto mb-10">
         <label className="block text-sm font-medium mb-2">
           🔎 Filter Sales Above:
@@ -32,6 +32,7 @@ export default function Dashboard() {
         />
       </div>
 
+      {/* Charts Section */}
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
         {/* Bar Chart */}
         <div className="bg-white p-6 rounded-xl shadow">
@@ -85,4 +86,5 @@ export default function Dashboard() {
     </main>
   );
 }
+
 

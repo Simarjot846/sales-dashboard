@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from "react";
-import ChartCard from "../molecules/Chartcard";
+import ChartCard from '../molecules/ChartCard';
 import Input from "../atoms/Input";
 import { filterSalesByYear } from "../../lib/utils";
 import salesData from "../../data/salesData.json";
