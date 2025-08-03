@@ -1,10 +1,13 @@
 'use client';
 
 import React, { useState } from 'react';
+import Link from 'next/link'; 
+
 import {
   BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
   LineChart, Line, PieChart, Pie, Cell
 } from 'recharts';
+
 import { salesData } from '../lib/salesData';
 
 const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
@@ -16,7 +19,16 @@ export default function Dashboard() {
 
   return (
     <main className="min-h-screen bg-gray-50 px-6 py-10 text-gray-800">
-      <h1 className="text-3xl font-bold text-center mb-8">📊 Sales Dashboard</h1>
+      <h1 className="text-3xl font-bold text-center mb-4">📊 Sales Dashboard</h1>
+
+      {/* 🏠 Link to Homepage */}
+      <div className="text-center mb-8">
+        <Link href="/">
+          <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
+            ← Back to Home
+          </button>
+        </Link>
+      </div>
 
       {/* Threshold Filter Input */}
       <div className="max-w-xl mx-auto mb-10">
@@ -86,5 +98,6 @@ export default function Dashboard() {
     </main>
   );
 }
+
 
 
