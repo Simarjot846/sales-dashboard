@@ -1,111 +1,172 @@
-'use client';
+"use client";
 
-import React, { useEffect, useState } from 'react';
-import Link from 'next/link';
-
+import { useState } from "react";
 import {
-  BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend,
-  LineChart, Line, PieChart, Pie, Cell
-} from 'recharts';
+  ResponsiveContainer,
+  BarChart,
+  Bar,
+  XAxis,
+  YAxis,
+  Tooltip,
+  CartesianGrid,
+  PieChart,
+  Pie,
+  Cell,
+  LineChart,
+  Line,
+} from "recharts";
 
-import { salesData } from '../lib/salesData';
+const data = [
+  { name: "Jan", sales: 4000, revenue: 2400 },
+  { name: "Feb", sales: 3000, revenue: 1398 },
+  { name: "Mar", sales: 2000, revenue: 9800 },
+  { name: "Apr", sales: 2780, revenue: 3908 },
+  { name: "May", sales: 1890, revenue: 4800 },
+  { name: "Jun", sales: 2390, revenue: 3800 },
+];
 
-const COLORS = ['#0088FE', '#00C49F', '#FFBB28'];
+const pieData = [
+  { name: "Product A", value: 400 },
+  { name: "Product B", value: 300 },
+  { name: "Product C", value: 300 },
+  { name: "Product D", value: 200 },
+];
 
-export default function Dashboard() {
-  const [threshold, setThreshold] = useState<number>(0);
-  const [isClient, setIsClient] = useState(false); // 👈 prevent hydration error
+const COLORS = ["#00f5ff", "#ff00e6", "#39ff14", "#ffaa00"];
 
-  useEffect(() => {
-    setIsClient(true); // Set true on client-side only
-  }, []);
-
-  const filteredData = salesData.filter((data) => data.sales >= threshold);
+export default function DashboardPage() {
+  const [activeChart, setActiveChart] = useState("bar");
 
   return (
-    <main className="min-h-screen bg-gray-50 px-6 py-10 text-gray-800">
-      <h1 className="text-3xl font-bold text-center mb-4">📊 Sales Dashboard</h1>
+    <div
+      style={{
+        minHeight: "100vh",
+        background: "linear-gradient(135deg, #050d1a, #091f36)",
+        color: "#fff",
+        padding: "2rem",
+        fontFamily: "sans-serif",
+      }}
+    >
+      {/* Top KPI Cards */}
+      <div
+        style={{
+          display: "grid",
+          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
+          gap: "1rem",
+          marginBottom: "2rem",
+        }}
+      >
+        {[
+          { title: "Total Sales", value: "$50K" },
+          { title: "Revenue", value: "$120K" },
+          { title: "Growth", value: "+25%" },
+          { title: "Customers", value: "3.2K" },
+        ].map((card, i) => (
+          <div
+            key={i}
+            style={{
+              background: "rgba(255, 255, 255, 0.08)",
+              backdropFilter: "blur(10px)",
+              borderRadius: "1rem",
+              padding: "1.5rem",
+              boxShadow: "0 4px 30px rgba(0, 0, 0, 0.5)",
+              textAlign: "center",
+              border: "1px solid rgba(255, 255, 255, 0.2)",
+              transition: "transform 0.3s",
+              cursor: "pointer",
+            }}
+            onMouseEnter={(e) => (e.currentTarget.style.transform = "scale(1.05)")}
+            onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          >
+            <h3 style={{ fontSize: "1.2rem", marginBottom: "0.5rem" }}>{card.title}</h3>
+            <p style={{ fontSize: "1.5rem", fontWeight: "bold" }}>{card.value}</p>
+          </div>
+        ))}
+      </div>
 
-      {/* 🏠 Link to Homepage */}
-      <div className="text-center mb-8">
-        <Link href="/">
-          <button className="bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600 transition">
-            ← Back to Home
+      {/* Chart Tabs */}
+      <div style={{ display: "flex", justifyContent: "center", gap: "1rem", marginBottom: "1.5rem" }}>
+        {["bar", "pie", "line"].map((chart) => (
+          <button
+            key={chart}
+            onClick={() => setActiveChart(chart)}
+            style={{
+              padding: "0.7rem 1.2rem",
+              borderRadius: "8px",
+              border: "none",
+              cursor: "pointer",
+              background: activeChart === chart ? "#00f5ff" : "rgba(255,255,255,0.1)",
+              color: activeChart === chart ? "#000" : "#fff",
+              fontWeight: "bold",
+              transition: "0.3s",
+            }}
+          >
+            {chart.toUpperCase()}
           </button>
-        </Link>
+        ))}
       </div>
 
-      {/* Threshold Filter Input */}
-      <div className="max-w-xl mx-auto mb-10">
-        <label className="block text-sm font-medium mb-2">
-          🔎 Filter Sales Above:
-        </label>
-        <input
-          type="number"
-          value={threshold}
-          onChange={(e) => setThreshold(Number(e.target.value))}
-          placeholder="Enter sales threshold"
-          className="w-full px-4 py-2 border rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-blue-400"
-        />
-      </div>
-
-      {/* Charts Section */}
-      {isClient && ( // 👈 only render charts on the client
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
-          {/* Bar Chart */}
-          <div className="bg-white p-6 rounded-xl shadow">
-            <h2 className="text-lg font-semibold mb-4">📦 Bar Chart</h2>
-            <BarChart width={450} height={300} data={filteredData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Bar dataKey="sales" fill="#4F46E5" />
+      {/* Chart Display */}
+      <div
+        style={{
+          background: "rgba(255, 255, 255, 0.08)",
+          borderRadius: "1rem",
+          padding: "1rem",
+          height: "400px",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+        }}
+      >
+        {activeChart === "bar" && (
+          <ResponsiveContainer width="100%" height="90%">
+            <BarChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.2)" />
+              <XAxis dataKey="name" stroke="#fff" />
+              <YAxis stroke="#fff" />
+              <Tooltip contentStyle={{ background: "#111", border: "none", color: "#fff" }} />
+              <Bar dataKey="sales" fill="url(#colorSales)" />
+              <defs>
+                <linearGradient id="colorSales" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="5%" stopColor="#00f5ff" stopOpacity={0.9} />
+                  <stop offset="95%" stopColor="#ff00e6" stopOpacity={0.9} />
+                </linearGradient>
+              </defs>
             </BarChart>
-          </div>
+          </ResponsiveContainer>
+        )}
 
-          {/* Line Chart */}
-          <div className="bg-white p-6 rounded-xl shadow">
-            <h2 className="text-lg font-semibold mb-4">📈 Line Chart</h2>
-            <LineChart width={450} height={300} data={filteredData}>
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="year" />
-              <YAxis />
-              <Tooltip />
-              <Legend />
-              <Line type="monotone" dataKey="sales" stroke="#F59E0B" />
-            </LineChart>
-          </div>
-
-          {/* Pie Chart */}
-          <div className="bg-white p-6 rounded-xl shadow col-span-1 md:col-span-2">
-            <h2 className="text-lg font-semibold mb-4">🥧 Pie Chart</h2>
-            <PieChart width={800} height={300}>
-              <Pie
-                data={filteredData}
-                dataKey="sales"
-                nameKey="year"
-                cx="50%"
-                cy="50%"
-                outerRadius={100}
-                fill="#8884d8"
-                label
-              >
-                {filteredData.map((_, index) => (
+        {activeChart === "pie" && (
+          <ResponsiveContainer width="100%" height="90%">
+            <PieChart>
+              <Pie data={pieData} dataKey="value" nameKey="name" outerRadius={120} fill="#8884d8">
+                {pieData.map((_, index) => (
                   <Cell key={`cell-${index}`} fill={COLORS[index % COLORS.length]} />
                 ))}
               </Pie>
-              <Tooltip />
-              <Legend />
+              <Tooltip contentStyle={{ background: "#111", border: "none", color: "#fff" }} />
             </PieChart>
-          </div>
-        </div>
-      )}
-    </main>
+          </ResponsiveContainer>
+        )}
+
+        {activeChart === "line" && (
+          <ResponsiveContainer width="100%" height="90%">
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.2)" />
+              <XAxis dataKey="name" stroke="#fff" />
+              <YAxis stroke="#fff" />
+              <Tooltip contentStyle={{ background: "#111", border: "none", color: "#fff" }} />
+              <Line
+                type="monotone"
+                dataKey="revenue"
+                stroke="#39ff14"
+                strokeWidth={3}
+                dot={{ fill: "#39ff14", strokeWidth: 2, r: 5 }}
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        )}
+      </div>
+    </div>
   );
 }
-
-
-
-
